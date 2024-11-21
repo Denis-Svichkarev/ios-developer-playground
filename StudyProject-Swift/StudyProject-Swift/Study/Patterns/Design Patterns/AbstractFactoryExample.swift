@@ -25,12 +25,12 @@ class MacOSCheckbox: Checkbox {
 
 // Abstract Factory
 protocol GUIFactory {
-    func createButton() -> Button
+    func createButton() -> TButton
     func createCheckbox() -> Checkbox
 }
 
 class WindowsFactory: GUIFactory {
-    func createButton() -> Button {
+    func createButton() -> TButton {
         return WindowsButton()
     }
     
@@ -40,7 +40,7 @@ class WindowsFactory: GUIFactory {
 }
 
 class MacOSFactory: GUIFactory {
-    func createButton() -> Button {
+    func createButton() -> TButton {
         return MacOSButton()
     }
     

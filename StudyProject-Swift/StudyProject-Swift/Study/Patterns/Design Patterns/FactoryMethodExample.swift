@@ -7,17 +7,17 @@
 
 import Foundation
 
-protocol Button {
+protocol TButton {
     func render()
 }
 
-class WindowsButton: Button {
+class WindowsButton: TButton {
     func render() {
         print("Rendering Windows button")
     }
 }
 
-class MacOSButton: Button {
+class MacOSButton: TButton {
     func render() {
         print("Rendering MacOS button")
     }
@@ -25,12 +25,12 @@ class MacOSButton: Button {
 
 // Factory
 protocol Dialog {
-    func createButton() -> Button
+    func createButton() -> TButton
     func renderUI()
 }
 
 class WindowsDialog: Dialog {
-    func createButton() -> Button {
+    func createButton() -> TButton {
         return WindowsButton()
     }
     
@@ -41,7 +41,7 @@ class WindowsDialog: Dialog {
 }
 
 class MacOSDialog: Dialog {
-    func createButton() -> Button {
+    func createButton() -> TButton {
         return MacOSButton()
     }
     
