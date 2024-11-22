@@ -8,14 +8,6 @@
 import Combine
 import Foundation
 
-protocol UserServiceProtocol {
-    var currentUser: User? { get }
-    var isLoggedIn: Bool { get }
-    
-    func login(email: String, password: String) -> AnyPublisher<User, UserServiceError>
-    func logout()
-}
-
 class UserService: UserServiceProtocol {
     private let baseURL: URL
     private let session: URLSession

@@ -11,7 +11,7 @@ class AppCoordinator: ObservableObject {
     func start() -> some View {
         NavigationView {
             AuthView()
-                .onAppear { /* логика навигации после успешного входа */ }
+                .onAppear {}
         }
     }
 }
