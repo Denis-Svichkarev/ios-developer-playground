@@ -13,7 +13,18 @@ struct SwiftUI_MVVMApp: App {
 
     var body: some Scene {
         WindowGroup {
-            coordinator.start()
+            NavigationView {
+                switch coordinator.navigationStack.last {
+                case .loading:
+                    LoadingView()
+                case .auth:
+                    AuthView()
+                case .newsFeed:
+                    NewsFeedView()
+                default:
+                    Text("Unknown Route")
+                }
+            }
         }
     }
 }

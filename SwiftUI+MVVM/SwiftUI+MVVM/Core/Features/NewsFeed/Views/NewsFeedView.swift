@@ -19,9 +19,15 @@ struct NewsFeedView: View {
         }
         .navigationTitle("News Feed")
         .toolbar {
-            Button(action: { /* открыть камеру */ }) {
+            Button(action: {
+                
+            }) {
                 Image(systemName: "camera")
             }
         }
     }
+}
+
+#Preview {
+    NewsFeedView()
 }
