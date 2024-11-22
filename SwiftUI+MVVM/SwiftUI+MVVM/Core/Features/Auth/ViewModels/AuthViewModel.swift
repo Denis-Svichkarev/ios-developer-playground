@@ -13,6 +13,8 @@ class AuthViewModel: ObservableObject {
     private let userService: UserServiceProtocol
     private var cancellables = Set<AnyCancellable>()
 
+    var onLoginSuccess: (() -> Void)?
+    
     init(userService: UserServiceProtocol) {
         self.userService = userService
     }
@@ -23,6 +25,7 @@ class AuthViewModel: ObservableObject {
                 switch completion {
                 case .finished:
                     print("Login successful")
+                    self.onLoginSuccess?()
                 case .failure(let error):
                     print("Login failed: \(error.localizedDescription)")
                 }

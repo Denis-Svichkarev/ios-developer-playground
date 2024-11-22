@@ -9,22 +9,37 @@ import SwiftUI
 
 @main
 struct SwiftUI_MVVMApp: App {
-    @StateObject private var coordinator = AppCoordinator()
-
     var body: some Scene {
         WindowGroup {
-            NavigationView {
-                switch coordinator.navigationStack.last {
-                case .loading:
-                    LoadingView()
-                case .auth:
-                    AuthView()
-                case .newsFeed:
-                    NewsFeedView()
-                default:
-                    Text("Unknown Route")
-                }
+            ContentView()
+        }
+    }
+}
+
+struct ContentView: View {
+    @StateObject private var coordinator = AppCoordinator()
+
+    var body: some View {
+        NavigationView {
+            switch coordinator.navigationStack.last {
+            case .loading:
+                LoadingView()
+            case .auth:
+                AuthView()
+                    .environmentObject(coordinator)
+            case .newsFeed:
+                NewsFeedView()
+                    .environmentObject(coordinator)
+            case .postDetail(_):
+                PostDetailView()
+                    .environmentObject(coordinator)
+            default:
+                Text("Unknown Route")
             }
         }
     }
+}
+
+#Preview {
+    ContentView()
 }

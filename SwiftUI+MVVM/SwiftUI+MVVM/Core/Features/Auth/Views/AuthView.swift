@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct AuthView: View {
+    @EnvironmentObject var coordinator: AppCoordinator
     @StateObject private var viewModel = AuthViewModel(userService: DataSourceManager.shared.getUserService())
     
     @State private var email = ""
@@ -27,6 +28,11 @@ struct AuthView: View {
             }
         }
         .padding()
+        .onAppear {
+            viewModel.onLoginSuccess = {
+                coordinator.navigate(to: .newsFeed)
+            }
+        }
     }
 }
 

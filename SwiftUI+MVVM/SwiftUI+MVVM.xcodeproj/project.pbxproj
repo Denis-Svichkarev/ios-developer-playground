@@ -29,9 +29,33 @@
 		250D83592CF09A20009D43F6 /* SwiftUI+MVVMUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SwiftUI+MVVMUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		250D842C2CF0FC83009D43F6 /* Exceptions for "SwiftUI+MVVM" folder in "SwiftUI+MVVM" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Resources/MockData/posts.json,
+			);
+			target = 250D833E2CF09A1F009D43F6 /* SwiftUI+MVVM */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		250D842D2CF0FC83009D43F6 /* Exceptions for "SwiftUI+MVVM" folder in "Compile Sources" phase from "SwiftUI+MVVM" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = 250D833B2CF09A1F009D43F6 /* Sources */;
+			membershipExceptions = (
+				Resources/MockData/posts.json,
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		250D83412CF09A1F009D43F6 /* SwiftUI+MVVM */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				250D842C2CF0FC83009D43F6 /* Exceptions for "SwiftUI+MVVM" folder in "SwiftUI+MVVM" target */,
+				250D842D2CF0FC83009D43F6 /* Exceptions for "SwiftUI+MVVM" folder in "Compile Sources" phase from "SwiftUI+MVVM" target */,
+			);
 			path = "SwiftUI+MVVM";
 			sourceTree = "<group>";
 		};

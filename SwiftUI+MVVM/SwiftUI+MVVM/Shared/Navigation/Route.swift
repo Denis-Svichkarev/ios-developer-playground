@@ -9,4 +9,5 @@ enum Route {
     case loading
     case auth
     case newsFeed
+    case postDetail(Post)
 }

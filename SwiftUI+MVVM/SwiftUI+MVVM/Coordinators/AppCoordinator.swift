@@ -30,6 +30,12 @@ class AppCoordinator: Coordinator {
         navigationStack.removeAll()
         navigationStack.append(.loading)
     }
+    
+    func logout() {
+        userService.logout()
+        popToRoot()
+        navigate(to: .auth)
+    }
 
     private func checkUserStatus() {
         userService.login(email: "test@test.com", password: "12345")
