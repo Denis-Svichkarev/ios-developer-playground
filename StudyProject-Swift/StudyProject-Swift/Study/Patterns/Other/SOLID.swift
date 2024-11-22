@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - S - Single Responsibility Principle
 
-//class UserManager {
+//class TUserManager {
 //    func saveUser(user: String) {
 //        print("User saved: \(user)")
 //        logUserSave(user: user)
@@ -20,7 +20,7 @@ import Foundation
 //    }
 //}
 
-class UserManager {
+class TUserManager {
     let logger = Logger()
 
     func saveUser(user: String) {

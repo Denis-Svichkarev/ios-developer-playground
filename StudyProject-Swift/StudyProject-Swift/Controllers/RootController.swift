@@ -23,9 +23,4 @@ class RootController: UIViewController {
         let vc = mainStoryboard.instantiateViewController(withIdentifier: "PatternsController")
         navigationController?.pushViewController(vc, animated: true)
     }
-    
-    @IBAction func onSwiftUIMVVMButtonPressed(_ sender: Any) {
-        let vc = mainStoryboard.instantiateViewController(withIdentifier: "SwiftUIMVVMController")
-        navigationController?.pushViewController(vc, animated: true)
-    }
 }
