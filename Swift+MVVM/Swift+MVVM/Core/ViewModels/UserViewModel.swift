@@ -12,6 +12,8 @@ class UserViewModel {
     private var cancellables = Set<AnyCancellable>()
 
     @Published var user: User? = nil
+    @Published var isLoading: Bool = false
+    
     var userDidChange: ((User?) -> Void)?
 
     init(userService: UserService) {
@@ -19,7 +21,9 @@ class UserViewModel {
     }
 
     func fetchCurrentUser() async {
+        isLoading = true
         self.user = await userService.fetchCurrentUser()
+        isLoading = false
     }
 
     func saveUser(username: String, password: String) async {
