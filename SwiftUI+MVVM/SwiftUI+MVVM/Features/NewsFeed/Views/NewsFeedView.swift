@@ -9,7 +9,6 @@ import SwiftUI
 
 struct NewsFeedView: View {
     @EnvironmentObject var coordinator: AppCoordinator
-    @EnvironmentObject var userState: UserState
     @StateObject private var viewModel = NewsFeedViewModel()
 
     var body: some View {
@@ -17,7 +16,7 @@ struct NewsFeedView: View {
             VStack(alignment: .leading) {
                 Text(post.content)
                 Button("View Details") {
-                    coordinator.path.append(.postDetail(post))
+                    coordinator.handle(.showPostDetail(post))
                 }
             }
         }
@@ -29,7 +28,7 @@ struct NewsFeedView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
-                    coordinator.logout()
+                    coordinator.handle(.logout)
                 }) {
                     Image(systemName: "arrow.backward.circle.fill")
                         .foregroundColor(.red)

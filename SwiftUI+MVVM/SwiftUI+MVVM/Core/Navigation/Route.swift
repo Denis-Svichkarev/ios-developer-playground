@@ -6,7 +6,23 @@
 //
 
 enum Route: Hashable {
-    case auth
-    case newsFeed
+    // Auth flow routes
+    case login
+    case registration
+    case forgotPassword
+    
+    // Main flow routes
     case postDetail(Post)
+    case userProfile(User)
+    case settings
+    case createNewPost
+    
+    // Settings flow routes
+    case accountSettings
+    case privacySettings
+    case notificationSettings
+    
+    // Profile flow routes
+    case editProfile
+    case myPosts
 }

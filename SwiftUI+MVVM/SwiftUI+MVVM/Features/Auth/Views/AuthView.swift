@@ -9,7 +9,6 @@ import SwiftUI
 
 struct AuthView: View {
     @EnvironmentObject var coordinator: AppCoordinator
-    @EnvironmentObject var userState: UserState
     @StateObject private var viewModel = AuthViewModel()
     
     var body: some View {
@@ -33,7 +32,8 @@ struct AuthView: View {
             Button(action: {
                 Task {
                     do {
-                        _ = try await viewModel.login()
+                        try await viewModel.login()
+                        coordinator.handle(.loginSuccess)
                     } catch {
                         print("Login failed: \(error.localizedDescription)")
                     }

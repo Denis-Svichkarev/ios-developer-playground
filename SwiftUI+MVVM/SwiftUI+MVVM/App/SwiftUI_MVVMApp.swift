@@ -18,28 +18,69 @@ struct SwiftUI_MVVMApp: App {
 
 struct ContentView: View {
     @StateObject private var coordinator = AppCoordinator()
-    @StateObject private var userState = DataSourceManager.shared.getUserState()
     
     var body: some View {
         Group {
             if coordinator.isInitializing {
                 LoadingView()
             } else {
-                NavigationStack(path: $coordinator.path) {
-                    if userState.isLoggedIn {
-                        NewsFeedView()
-                            .environmentObject(coordinator)
-                            .environmentObject(userState)
-                            .navigationDestination(for: Route.self) { route in
-                                if case .postDetail(let post) = route {
-                                    PostDetailView(post: post)
-                                        .environmentObject(coordinator)
-                                }
-                            }
-                    } else {
-                        AuthView()
-                            .environmentObject(coordinator)
-                            .environmentObject(userState)
+                NavigationStack(path: $coordinator.navigationPath) {
+                    Group {
+                        switch coordinator.currentFlow {
+                        case .auth:
+                            AuthView()
+                                .environmentObject(coordinator)
+                        case .main:
+                            NewsFeedView()
+                                .environmentObject(coordinator)
+                        }
+                    }
+                    .navigationDestination(for: Route.self) { route in
+                        switch route {
+                        // Auth routes
+                        case .login:
+                            AuthView()
+                                .environmentObject(coordinator)
+                        case .registration:
+                            SignUpView()
+                                .environmentObject(coordinator)
+                        case .forgotPassword:
+                            ForgotPasswordView()
+                                .environmentObject(coordinator)
+                            
+                        // Main flow routes
+                        case .postDetail(let post):
+                            PostDetailView(post: post)
+                                .environmentObject(coordinator)
+                        case .userProfile(let user):
+                            ProfileView(user: user)
+                                .environmentObject(coordinator)
+                        case .settings:
+                            SettingsView()
+                                .environmentObject(coordinator)
+                        case .createNewPost:
+                            CreateNewPostView()
+                                .environmentObject(coordinator)
+                            
+                        // Settings routes
+                        case .accountSettings:
+                            AccountSettingsView()
+                                .environmentObject(coordinator)
+                        case .privacySettings:
+                            PrivacySettingsView()
+                                .environmentObject(coordinator)
+                        case .notificationSettings:
+                            NotificationSettingsView()
+                                .environmentObject(coordinator)
+                            
+                        // Profile routes
+                        case .editProfile:
+                            EditProfileView()
+                                .environmentObject(coordinator)
+                        case .myPosts:
+                            MyPostsView()
+                                .environmentObject(coordinator)
+                        }
                     }
                 }
             }

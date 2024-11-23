@@ -24,14 +24,16 @@ class AuthViewModel: ObservableObject {
     }
     
     @MainActor
-    func login() async throws -> User {
+    func login() async throws {
+        guard !isLoading else { return }
+        
         isLoading = true
         defer { isLoading = false }
         
         do {
             let user = try await userService.login(email: email, password: password)
+            print("Logged in user: \(user.name)")
             errorMessage = nil
-            return user
         } catch {
             errorMessage = error.localizedDescription
             throw error
