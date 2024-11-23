@@ -1,5 +1,5 @@
-# Study Projects
-Welcome to my Study Projects repository! This collection of sample projects is designed to explore and master various architectural patterns and programming languages in iOS development.
+# iOS Developer's Playground
+Welcome to the iOS Developer's Playground! This repository contains a collection of study projects to explore and master various architectural patterns and programming languages in iOS development.
 
 ## Project Structure
 This repository currently contains the following projects:
