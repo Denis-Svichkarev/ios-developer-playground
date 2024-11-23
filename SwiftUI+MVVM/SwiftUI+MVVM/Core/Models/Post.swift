@@ -11,5 +11,6 @@ struct Post: Codable, Identifiable, Hashable {
     var id: UUID
     var userId: UUID
     var content: String
+    var imageUrl: String?
     var timestamp: Date
 }
