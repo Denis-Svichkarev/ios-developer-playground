@@ -7,7 +7,6 @@
 
 enum Route: Hashable {
     // Auth flow routes
-    case login
     case registration
     case forgotPassword
     

@@ -38,9 +38,6 @@ struct ContentView: View {
                     .navigationDestination(for: Route.self) { route in
                         switch route {
                         // Auth routes
-                        case .login:
-                            AuthView()
-                                .environmentObject(coordinator)
                         case .registration:
                             SignUpView()
                                 .environmentObject(coordinator)

@@ -48,6 +48,14 @@ struct AuthView: View {
             }
             .buttonStyle(.borderedProminent)
             .disabled(!viewModel.isValid || viewModel.isLoading)
+            
+            Button("Create Account") {
+                coordinator.handle(.showRegistration)
+            }
+            
+            Button("Forgot Password?") {
+                coordinator.handle(.showForgotPassword)
+            }
         }
         .padding()
         .navigationBarBackButtonHidden(true)

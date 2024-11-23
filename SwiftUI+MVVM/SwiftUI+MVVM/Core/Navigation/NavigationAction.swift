@@ -7,7 +7,6 @@
 
 enum NavigationAction {
     // Auth actions
-    case showLogin
     case showRegistration
     case showForgotPassword
     case loginSuccess

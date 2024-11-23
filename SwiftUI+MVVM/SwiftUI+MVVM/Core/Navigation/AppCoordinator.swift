@@ -31,8 +31,6 @@ class AppCoordinator: ObservableObject {
     func handle(_ action: NavigationAction) {
         switch action {
         // Auth actions
-        case .showLogin:
-            navigationPath.append(.login)
         case .showRegistration:
             navigationPath.append(.registration)
         case .showForgotPassword:
