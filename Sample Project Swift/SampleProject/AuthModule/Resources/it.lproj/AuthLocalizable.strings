@@ -1,0 +1,16 @@
+"login_screen_title" = "Accedi";
+"login_username_placeholder" = "Nome utente";
+"login_password_placeholder" = "Password";
+"login_button_title" = "Accedi";
+"register_button_title" = "Registrati";
+
+"registration_screen_title" = "Registrazione";
+"registration_username_placeholder" = "Nome utente";
+"registration_password_placeholder" = "Password";
+"registration_confirm_password_placeholder" = "Conferma password";
+"registration_register_button_title" = "Registrati";
+
+"auth_loading_screen_title" = "Attendere prego...";
+
+"auth_failure_screen_title" = "Qualcosa è andato storto";
+"auth_failure_try_again_button_title" = "Riprova";
