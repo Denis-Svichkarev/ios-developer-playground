@@ -3,7 +3,7 @@ Welcome to the iOS Developer's Playground! This repository contains a collection
 
 ## Project Structure
 This repository currently contains the following projects:
-- Swift+MVVM: A sample project written in Swift, also demonstrating the MVVM pattern.
+- Swift+MVVM: A sample project written in Swift demonstrating the MVVM pattern.
 - SwiftUI+MVVM: A simple project showcasing the implementation of the MVVM architecture using SwiftUI.
 - StudyObj-C: A project focused on exploring the unique aspects of Objective-C.
 - StudySwift: A project dedicated to studying the features and nuances of the Swift programming language.
