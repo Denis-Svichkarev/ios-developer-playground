@@ -9,21 +9,23 @@ import SwiftUI
 
 struct NewsFeedView: View {
     @EnvironmentObject var coordinator: AppCoordinator
+    @EnvironmentObject var userState: UserState
     @StateObject private var viewModel = NewsFeedViewModel()
 
     var body: some View {
         List(viewModel.posts) { post in
-            Text(post.content)
-            Button(action: {
-                coordinator.navigate(to: .postDetail(post))
-            }) {
-                Image(systemName: "camera")
+            VStack(alignment: .leading) {
+                Text(post.content)
+                Button("View Details") {
+                    coordinator.path.append(.postDetail(post))
+                }
             }
         }
-        .onAppear {
+        .onAppear() {
             viewModel.fetchPosts()
         }
         .navigationTitle("News Feed")
+        .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
@@ -31,14 +33,6 @@ struct NewsFeedView: View {
                 }) {
                     Image(systemName: "arrow.backward.circle.fill")
                         .foregroundColor(.red)
-                }
-            }
-            
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button(action: {
-                    
-                }) {
-                    Image(systemName: "camera")
                 }
             }
         }

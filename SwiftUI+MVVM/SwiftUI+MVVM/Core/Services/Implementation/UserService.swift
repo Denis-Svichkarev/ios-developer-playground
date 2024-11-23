@@ -1,5 +1,5 @@
 //
-//  FakeUserService.swift
+//  UserService.swift
 //  StudyProject-Swift
 //
 //  Created by Denis Svichkarev on 22/11/24.
@@ -13,39 +13,40 @@ class UserService: UserServiceProtocol {
     private let session: URLSession
     private let decoder: JSONDecoder
     private let isFakeData: Bool
-    
-    private(set) var currentUser: User?
-    
-    var isLoggedIn: Bool {
-        currentUser != nil
-    }
+    private let userState: UserState
     
     init(
           baseURL: URL = URL(string: "https://real-api.com")!,
           session: URLSession = .shared,
           decoder: JSONDecoder = JSONDecoder(),
-          isFakeData: Bool = false
+          isFakeData: Bool = false,
+          userState: UserState
     ) {
         self.baseURL = baseURL
         self.session = session
         self.decoder = decoder
         self.isFakeData = isFakeData
+        self.userState = userState
         
         setupDecoder()
     }
     
     // MARK: - Public Methods
-       
-    func login(email: String, password: String) -> AnyPublisher<User, UserServiceError> {
+    
+    func login(email: String, password: String) async throws -> User {
         guard !email.isEmpty, !password.isEmpty else {
-            return Fail(error: .unauthorized).eraseToAnyPublisher()
+            throw UserServiceError.unauthorized
         }
         
-        return isFakeData ? fetchFromFile() : fetchFromAPI(email: email, password: password)
+        let user = try await (isFakeData ? fetchFromFile() : fetchFromAPI(email: email, password: password))
+        await MainActor.run {
+            userState.updateUser(user)
+        }
+        return user
     }
     
     func logout() {
-        currentUser = nil
+        userState.updateUser(nil)
     }
    
     // MARK: - Private Methods
@@ -55,7 +56,7 @@ class UserService: UserServiceProtocol {
         decoder.dateDecodingStrategy = .iso8601
     }
     
-    private func fetchFromAPI(email: String, password: String) -> AnyPublisher<User, UserServiceError> {
+    private func fetchFromAPI(email: String, password: String) async throws -> User  {
         let endpoint = baseURL.appendingPathComponent("user/login")
         
         var request = URLRequest(url: endpoint)
@@ -65,60 +66,40 @@ class UserService: UserServiceProtocol {
         let credentials = ["email": email, "password": password]
         request.httpBody = try? JSONSerialization.data(withJSONObject: credentials)
         
-        return session.dataTaskPublisher(for: request)
-            .mapError { UserServiceError.networkError($0) }
-            .tryMap { [weak self] data, response -> User in
-                guard let self = self else { throw UserServiceError.invalidResponse }
-                
-                guard let httpResponse = response as? HTTPURLResponse else {
-                    throw UserServiceError.invalidResponse
-                }
-                
-                switch httpResponse.statusCode {
-                case 200...299:
-                    return try self.decoder.decode(User.self, from: data)
-                case 401:
-                    throw UserServiceError.unauthorized
-                case 404:
-                    throw UserServiceError.notFound
-                default:
-                    throw UserServiceError.invalidResponse
-                }
-            }
-            .mapError { error -> UserServiceError in
-                if let error = error as? UserServiceError {
-                    return error
-                }
-                if error is DecodingError {
-                    return .decodingError
-                }
-                return .networkError(error)
-            }
-            .handleEvents(receiveOutput: { [weak self] user in
-                self?.currentUser = user
-            })
-            .receive(on: DispatchQueue.main)
-            .eraseToAnyPublisher()
-    }
-    
-    private func fetchFromFile() -> AnyPublisher<User, UserServiceError> {
-        guard let url = Bundle.main.url(forResource: "user", withExtension: "json") else {
-            return Fail(error: .notFound).eraseToAnyPublisher()
+        let (data, response) = try await session.data(for: request)
+            
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw UserServiceError.invalidResponse
         }
         
-        return Just(url)
-            .tryMap { try Data(contentsOf: $0) }
-            .decode(type: User.self, decoder: decoder)
-            .mapError { error -> UserServiceError in
-                if error is DecodingError {
-                    return .decodingError
-                }
-                return .networkError(error)
+        switch httpResponse.statusCode {
+        case 200...299:
+            do {
+                return try decoder.decode(User.self, from: data)
+            } catch {
+                throw UserServiceError.decodingError
             }
-            .handleEvents(receiveOutput: { [weak self] user in
-                self?.currentUser = user
-            })
-            .receive(on: DispatchQueue.main)
-            .eraseToAnyPublisher()
+        case 401:
+            throw UserServiceError.unauthorized
+        case 404:
+            throw UserServiceError.notFound
+        default:
+            throw UserServiceError.invalidResponse
+        }
+    }
+    
+    private func fetchFromFile() async throws -> User {
+        guard let url = Bundle.main.url(forResource: "user", withExtension: "json") else {
+            throw UserServiceError.notFound
+        }
+        
+        try await Task.sleep(for: .seconds(2))
+        
+        let data = try Data(contentsOf: url)
+        do {
+            return try decoder.decode(User.self, from: data)
+        } catch {
+            throw UserServiceError.decodingError
+        }
     }
 }

@@ -12,9 +12,20 @@ class DataSourceManager {
     
     var isFakeData: Bool = true
     
-    private init() {}
+    private let userState: UserState
+    private lazy var userService: UserService = {
+        UserService(isFakeData: isFakeData, userState: userState)
+    }()
+    
+    private init() {
+        self.userState = UserState()
+    }
     
     func getUserService() -> UserServiceProtocol {
-        return UserService(isFakeData: isFakeData)
+        userService
+    }
+    
+    func getUserState() -> UserState {
+        userState
     }
 }

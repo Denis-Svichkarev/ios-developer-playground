@@ -18,23 +18,30 @@ struct SwiftUI_MVVMApp: App {
 
 struct ContentView: View {
     @StateObject private var coordinator = AppCoordinator()
-
+    @StateObject private var userState = DataSourceManager.shared.getUserState()
+    
     var body: some View {
-        NavigationView {
-            switch coordinator.navigationStack.last {
-            case .loading:
+        Group {
+            if coordinator.isInitializing {
                 LoadingView()
-            case .auth:
-                AuthView()
-                    .environmentObject(coordinator)
-            case .newsFeed:
-                NewsFeedView()
-                    .environmentObject(coordinator)
-            case .postDetail(_):
-                PostDetailView()
-                    .environmentObject(coordinator)
-            default:
-                Text("Unknown Route")
+            } else {
+                NavigationStack(path: $coordinator.path) {
+                    if userState.isLoggedIn {
+                        NewsFeedView()
+                            .environmentObject(coordinator)
+                            .environmentObject(userState)
+                            .navigationDestination(for: Route.self) { route in
+                                if case .postDetail(let post) = route {
+                                    PostDetailView(post: post)
+                                        .environmentObject(coordinator)
+                                }
+                            }
+                    } else {
+                        AuthView()
+                            .environmentObject(coordinator)
+                            .environmentObject(userState)
+                    }
+                }
             }
         }
     }

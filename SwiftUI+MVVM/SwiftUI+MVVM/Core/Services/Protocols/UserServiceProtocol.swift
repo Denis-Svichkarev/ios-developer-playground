@@ -8,9 +8,6 @@
 import Combine
 
 protocol UserServiceProtocol {
-    var currentUser: User? { get }
-    var isLoggedIn: Bool { get }
-    
-    func login(email: String, password: String) -> AnyPublisher<User, UserServiceError>
+    func login(email: String, password: String) async throws -> User
     func logout()
 }
