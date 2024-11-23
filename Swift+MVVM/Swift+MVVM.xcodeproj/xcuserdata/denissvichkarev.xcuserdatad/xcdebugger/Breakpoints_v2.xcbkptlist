@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "6DF8C5BE-A30B-405A-98D5-372F5B6B5943"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2F919E3C-0ED6-4B3F-B504-DA3BD8590C98"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Swift+MVVM/Core/Services/Backend/User/MockUserService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "14"
+            endingLineNumber = "14"
+            landmarkName = "fetchCurrentUser()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "2F919E3C-0ED6-4B3F-B504-DA3BD8590C98 - 8316a3ca853f8ef6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(2) suspend resume partial function for Swift_MVVM.MockUserService.fetchCurrentUser() async -&gt; Swift.Optional&lt;Swift_MVVM.User&gt;"
+                  moduleName = "Swift+MVVM.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/denissvichkarev/Projects/study-project-swift/Swift+MVVM/Swift+MVVM/Core/Services/Backend/User/MockUserService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "14"
+                  endingLineNumber = "14">
+               </Location>
+               <Location
+                  uuid = "2F919E3C-0ED6-4B3F-B504-DA3BD8590C98 - 2b85458f6c22cf9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for Swift_MVVM.MockUserService.fetchCurrentUser() async -&gt; Swift.Optional&lt;Swift_MVVM.User&gt;"
+                  moduleName = "Swift+MVVM.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/denissvichkarev/Projects/study-project-swift/Swift+MVVM/Swift+MVVM/Core/Services/Backend/User/MockUserService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "14"
+                  endingLineNumber = "14">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
