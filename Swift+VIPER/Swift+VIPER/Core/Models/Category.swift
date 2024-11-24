@@ -8,6 +8,6 @@
 struct Category: Codable {
     let id: String
     let name: String
-//    let imageURL: String?
-//    let recipesCount: Int
+    var imageURL: String?
+    let recipesCount: Int
 }

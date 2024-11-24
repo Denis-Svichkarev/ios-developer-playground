@@ -11,6 +11,7 @@ final class CategoriesRouter: CategoriesRouterProtocol {
     weak var viewController: UIViewController?
         
     func showRecipesList(for category: Category) {
-        print("Navigate to recipes list for \(category.name)")
+        let recipesListViewController = RecipesListModuleBuilder.build(with: category)
+        viewController?.navigationController?.pushViewController(recipesListViewController, animated: true)
     }
 }

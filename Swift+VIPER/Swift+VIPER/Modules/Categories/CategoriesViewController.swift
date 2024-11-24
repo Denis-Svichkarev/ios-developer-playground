@@ -80,6 +80,11 @@ extension CategoriesViewController: UICollectionViewDelegateFlowLayout {
         let width = (collectionView.bounds.width - insets.left - insets.right - spacing) / 2
         return CGSize(width: width, height: width * 1.4)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let category = categories[indexPath.item]
+        presenter?.didSelectCategory(category)
+    }
 }
 
 // MARK: - CategoriesViewProtocol

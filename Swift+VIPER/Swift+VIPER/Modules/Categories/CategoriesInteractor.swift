@@ -7,12 +7,14 @@
 
 final class CategoriesInteractor: CategoriesInteractorProtocol {
     weak var presenter: CategoriesPresenterProtocol?
-       
+    private let networkService: NetworkServiceProtocol
+    
+    init(networkService: NetworkServiceProtocol) {
+        self.networkService = networkService
+    }
+    
     func fetchCategories() async throws -> [Category] {
-        return [
-            Category(id: "1", name: "Breakfast"),
-            Category(id: "2", name: "Lunch"),
-            Category(id: "3", name: "Dinner")
-        ]
+        let categories = try await networkService.fetchCategories()
+             return categories
     }
 }

@@ -9,8 +9,10 @@ import UIKit
 
 final class CategoriesModuleBuilder {
     static func build() -> UIViewController {
+        let networkService = URLSessionNetworkService()
+            
         let view = CategoriesViewController()
-        let interactor = CategoriesInteractor()
+        let interactor = CategoriesInteractor(networkService: networkService)
         let router = CategoriesRouter()
         let presenter = CategoriesPresenter()
         

@@ -68,8 +68,23 @@ final class CategoryCell: UICollectionViewCell {
     
     func configure(with category: Category) {
         nameLabel.text = category.name
-//        recipesCountLabel.text = "\(category.recipesCount) recipes"
-//        
-//        if let imageURL = category.imageURL {}
+        recipesCountLabel.text = "\(category.recipesCount) recipes"
+
+        if let url = category.imageURL, let imageURL = URL(string: url) {
+            Task {
+                do {
+                    let (data, _) = try await URLSession.shared.data(from: imageURL)
+                    if let image = UIImage(data: data) {
+                        DispatchQueue.main.async {
+                            self.imageView.image = image
+                        }
+                    }
+                } catch {
+                    print("Error loading image: \(error)")
+                }
+            }
+        } else {
+            imageView.image = nil
+        }
     }
 }
