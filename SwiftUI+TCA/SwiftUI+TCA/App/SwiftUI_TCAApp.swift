@@ -6,14 +6,24 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
 
 @main
 struct SwiftUI_TCAApp: App {
-    var body: some Scene {
-        WindowGroup {
-            TabView {
-                ContentView()
-            }
-        }
-    }
+    let store = Store(
+         initialState: TodayFeature.State(),
+         reducer: TodayFeature()
+     )
+     
+     var body: some Scene {
+         WindowGroup {
+             TabView {
+                 TodayView(store: store)
+                     .tabItem {
+                         Image(systemName: "figure.walk")
+                         Text("Today")
+                     }
+             }
+         }
+     }
 }
