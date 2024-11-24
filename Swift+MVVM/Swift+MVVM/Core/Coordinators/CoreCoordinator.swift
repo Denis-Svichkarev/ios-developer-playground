@@ -24,9 +24,7 @@ class CoreCoordinator: Coordinator {
         userViewModel = UserViewModel(userService: userService)
         bindViewModel()
  
-        let loadingViewController = LoadingViewController(nibName: "LoadingViewController", bundle: nil)
-        self.window.rootViewController = loadingViewController
-        self.window.makeKeyAndVisible()
+        showLoading()
         
         Task {
             await userViewModel.fetchCurrentUser()
@@ -34,6 +32,17 @@ class CoreCoordinator: Coordinator {
     }
     
     private func bindViewModel() {
+        userViewModel.$isLoading
+            .sink { [weak self] isLoading in
+                guard let self = self else { return }
+                DispatchQueue.main.async {
+                    if isLoading {
+                        self.showLoading()
+                    }
+                }
+            }
+            .store(in: &cancellables)
+        
         userViewModel.$user
             .sink { [weak self] user in
                 guard let self = self else { return }
@@ -66,6 +75,12 @@ class CoreCoordinator: Coordinator {
         let authCoordinator = AuthCoordinator(window: window, userViewModel: userViewModel)
         authCoordinator.start()
         addChildCoordinator(authCoordinator)
+    }
+    
+    private func showLoading() {
+        let loadingViewController = LoadingViewController(nibName: "LoadingViewController", bundle: nil)
+        self.window.rootViewController = loadingViewController
+        self.window.makeKeyAndVisible()
     }
     
     deinit {
