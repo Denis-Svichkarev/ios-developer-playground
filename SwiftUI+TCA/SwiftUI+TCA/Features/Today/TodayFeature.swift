@@ -7,6 +7,7 @@
 
 import ComposableArchitecture
 import Combine
+import Foundation
 
 struct TodayFeature: ReducerProtocol {
     // MARK: - State
@@ -19,7 +20,7 @@ struct TodayFeature: ReducerProtocol {
     // MARK: - Action
     enum Action: Equatable {
         case onAppear
-        case stepsUpdated(Int)
+        case activityDataUpdated(MotionService.ActivityData)
         case motionError(String)
     }
     
@@ -33,22 +34,24 @@ struct TodayFeature: ReducerProtocol {
             state.isLoading = true
             
             guard motionService.isAvailable else {
-                state.error = "Step counting is not available on this device"
+                state.error = "Activity tracking is not available on this device"
                 state.isLoading = false
                 return .none
             }
             
             return .merge(
                 motionService.startUpdates()
-                    .map(Action.stepsUpdated)
+                    .receive(on: DispatchQueue.main)
+                    .map(Action.activityDataUpdated)
                     .catch { error in
                         Just(Action.motionError(error.localizedDescription))
                     }
                     .eraseToEffect()
             )
             
-        case let .stepsUpdated(steps):
-            state.currentActivity.steps = steps
+        case let .activityDataUpdated(data):
+            state.currentActivity.steps = data.steps
+            state.currentActivity.activityType = data.activityType
             state.isLoading = false
             return .none
             
