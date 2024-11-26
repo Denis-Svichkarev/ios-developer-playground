@@ -33,7 +33,6 @@ struct RouteMapView: UIViewRepresentable {
             mapView.addAnnotation(endAnnotation)
         }
         
-        // Добавляем линию маршрута
         let polyline = MKPolyline(
             coordinates: route.locations.map { $0.coordinate },
             count: route.locations.count
@@ -51,7 +50,6 @@ struct RouteMapView: UIViewRepresentable {
         Coordinator(self)
     }
     
-    // Coordinator для обработки делегатов карты
     class Coordinator: NSObject, MKMapViewDelegate {
         var parent: RouteMapView
         
