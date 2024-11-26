@@ -8,12 +8,14 @@
 import ComposableArchitecture
 
 struct RoutesFeature: ReducerProtocol {
+    // MARK: - State
     struct State: Equatable {
         var routes: [Route] = []
         var isLoading: Bool = false
         @PresentationState var routeDetails: RouteDetailsFeature.State?
     }
     
+    // MARK: - Action
     enum Action: Equatable {
         case onAppear
         case routesLoaded([Route])
@@ -21,8 +23,10 @@ struct RoutesFeature: ReducerProtocol {
         case routeDetails(PresentationAction<RouteDetailsFeature.Action>)
     }
     
+    // MARK: - Dependencies
     @Dependency(\.routesService) var routesService
     
+    // MARK: - Reducer
     var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in
             switch action {

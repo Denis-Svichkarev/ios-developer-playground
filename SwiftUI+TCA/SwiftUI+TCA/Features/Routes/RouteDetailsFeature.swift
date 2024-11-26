@@ -10,6 +10,7 @@ import MapKit
 import CoreLocation
 
 struct RouteDetailsFeature: ReducerProtocol {
+    // MARK: - State
     struct State: Equatable {
         let route: Route
         var region: MKCoordinateRegion
@@ -68,6 +69,7 @@ struct RouteDetailsFeature: ReducerProtocol {
         }
     }
     
+    // MARK: - Action
     enum Action: Equatable {
         case dismiss
         case regionChanged(MKCoordinateRegion)
@@ -93,6 +95,7 @@ struct RouteDetailsFeature: ReducerProtocol {
         }
     }
     
+    // MARK: - Reducer
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
         case .dismiss:
