@@ -10,20 +10,31 @@ import ComposableArchitecture
 
 @main
 struct SwiftUI_TCAApp: App {
-    let store = Store(
-         initialState: TodayFeature.State(),
-         reducer: TodayFeature()
-     )
+    let todayStore = Store(
+        initialState: TodayFeature.State(),
+        reducer: TodayFeature()
+    )
+    
+    let routesStore = Store(
+        initialState: RoutesFeature.State(),
+        reducer: RoutesFeature()
+    )
      
-     var body: some Scene {
-         WindowGroup {
-             TabView {
-                 TodayView(store: store)
-                     .tabItem {
-                         Image(systemName: "figure.walk")
-                         Text("Today")
-                     }
-             }
-         }
-     }
+    var body: some Scene {
+        WindowGroup {
+            TabView {
+                TodayView(store: todayStore)
+                    .tabItem {
+                        Image(systemName: "figure.walk")
+                        Text("Today")
+                    }
+                
+                RoutesView(store: routesStore)
+                    .tabItem {
+                        Image(systemName: "map")
+                        Text("Routes")
+                    }
+            }
+        }
+    }
 }

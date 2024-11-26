@@ -20,12 +20,17 @@ struct TodayFeature: ReducerProtocol {
     // MARK: - Action
     enum Action: Equatable {
         case onAppear
+        case onDisappear
         case activityDataUpdated(MotionService.ActivityData)
         case motionError(String)
     }
     
     // MARK: - Dependencies
     @Dependency(\.motionService) var motionService
+    
+    private enum CancellationID {
+        case motionUpdates
+    }
     
     // MARK: - Reducer
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
@@ -47,7 +52,11 @@ struct TodayFeature: ReducerProtocol {
                         Just(Action.motionError(error.localizedDescription))
                     }
                     .eraseToEffect()
+                    .cancellable(id: CancellationID.motionUpdates)
             )
+            
+        case .onDisappear:
+            return .cancel(id: CancellationID.motionUpdates)
             
         case let .activityDataUpdated(data):
             state.currentActivity.steps = data.steps

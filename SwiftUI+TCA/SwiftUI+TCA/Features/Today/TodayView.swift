@@ -10,7 +10,7 @@ import ComposableArchitecture
 
 struct TodayView: View {
     let store: Store<TodayFeature.State, TodayFeature.Action>
-    
+     
     var body: some View {
         WithViewStore(self.store) { viewStore in
             ScrollView {
@@ -38,6 +38,7 @@ struct TodayView: View {
                 .padding()
             }
             .onAppear { viewStore.send(.onAppear) }
+            .onDisappear { viewStore.send(.onDisappear) }
         }
     }
     
