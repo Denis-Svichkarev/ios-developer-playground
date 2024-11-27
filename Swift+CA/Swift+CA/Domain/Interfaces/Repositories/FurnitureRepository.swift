@@ -6,7 +6,7 @@
 //
 
 protocol FurnitureRepository {
-    func getAllFurniture() async throws -> [FurnitureItem]
     func getFurniture(by category: FurnitureCategory) async throws -> [FurnitureItem]
-    func getFurnitureItem(by id: String) async throws -> FurnitureItem?
+    func getFurnitureDetails(by id: String) async throws -> FurnitureItem
+    func searchFurniture(query: String, category: FurnitureCategory?) async throws -> [FurnitureItem]
 }

@@ -28,8 +28,14 @@ final class AppCoordinator: Coordinator {
     }
     
     func showCategoryDetail(category: FurnitureCategory) {
-        let detailViewModel = CategoryDetailViewModel(category: category)
-        let detailVC = CategoryDetailViewController(viewModel: detailViewModel)
+        let dataSource = LocalFurnitureDataSource()
+        let repository = FurnitureRepositoryImpl(dataSource: dataSource)
+        let useCase = GetCategoryFurnitureUseCaseImpl(repository: repository)
+        let viewModel = CategoryDetailViewModel(
+            category: category,
+            getCategoryFurniture: useCase
+        )
+        let detailVC = CategoryDetailViewController(viewModel: viewModel)
         detailVC.coordinator = self
         navigationController.pushViewController(detailVC, animated: true)
     }

@@ -30,6 +30,7 @@ final class CategoryDetailViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupCollectionView()
+        loadData()
     }
     
     // MARK: - Setup
@@ -52,6 +53,18 @@ final class CategoryDetailViewController: UIViewController {
             
             let width = (view.frame.width - 30) / 2
             layout.itemSize = CGSize(width: width, height: width * 1.3)
+        }
+    }
+    
+    // MARK: - Private Methods
+    private func loadData() {
+        Task {
+            do {
+                try await viewModel.loadFurniture()
+                collectionView.reloadData()
+            } catch {
+                print("Error loading furniture: \(error)")
+            }
         }
     }
 }

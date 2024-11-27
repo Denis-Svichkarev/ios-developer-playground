@@ -24,12 +24,12 @@ struct Dimensions {
     let depth: Float
 }
 
-enum FurnitureCategory: CaseIterable {
-    case chair
-    case table
-    case sofa
-    case bed
-    case storage
+enum FurnitureCategory: String, CaseIterable {
+    case chair = "chair"
+    case table = "table"
+    case sofa = "sofa"
+    case bed = "bed"
+    case storage = "storage"
     
     var displayName: String {
         switch self {
@@ -45,9 +45,20 @@ enum FurnitureCategory: CaseIterable {
         switch self {
             case .chair: return "chair.fill"
             case .table: return "tablecells.fill"
-            case .sofa: return "sofa.fill"
+            case .sofa: return "bed.double.fill"
             case .bed: return "bed.double.fill"
             case .storage: return "archivebox.fill"
+        }
+    }
+    
+    static func fromString(_ string: String) -> FurnitureCategory {
+        switch string.lowercased() {
+            case "chair": return .chair
+            case "table": return .table
+            case "sofa": return .sofa
+            case "bed": return .bed
+            case "storage": return .storage
+            default: return .chair
         }
     }
 }

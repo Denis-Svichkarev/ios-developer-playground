@@ -9,31 +9,19 @@ final class CategoryDetailViewModel {
     // MARK: - Properties
     let category: FurnitureCategory
     private(set) var items: [FurnitureItem] = []
+    private let getCategoryFurniture: GetCategoryFurnitureUseCase
     
     // MARK: - Initialization
-    init(category: FurnitureCategory) {
+    init(
+        category: FurnitureCategory,
+        getCategoryFurniture: GetCategoryFurnitureUseCase
+    ) {
         self.category = category
-        self.items = [
-            FurnitureItem(
-                id: "1",
-                name: "Modern Chair",
-                description: "Comfortable modern chair",
-                category: category,
-                price: 299,
-                dimensions: Dimensions(width: 0.6, height: 1.0, depth: 0.6),
-                modelFileName: "chair_model",
-                previewImageName: "chair_preview"
-            ),
-            FurnitureItem(
-                id: "2",
-                name: "Classic Chair",
-                description: "Classic style chair",
-                category: category,
-                price: 399,
-                dimensions: Dimensions(width: 0.6, height: 1.0, depth: 0.6),
-                modelFileName: "chair_model2",
-                previewImageName: "chair_preview2"
-            )
-        ]
+        self.getCategoryFurniture = getCategoryFurniture
+    }
+    
+    // MARK: - Public Methods
+    func loadFurniture() async throws {
+        items = try await getCategoryFurniture.execute(category: category)
     }
 }
