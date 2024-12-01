@@ -11,6 +11,30 @@ final class CategoryDetailViewController: UIViewController {
     // MARK: - IBOutlets
     @IBOutlet private weak var collectionView: UICollectionView!
     
+    // MARK: - UI Components
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+    
+    private lazy var errorLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .center
+        label.textColor = .systemRed
+        label.numberOfLines = 0
+        label.isHidden = true
+        return label
+    }()
+    
+    private lazy var refreshControl: UIRefreshControl = {
+        let refresh = UIRefreshControl()
+        refresh.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
+        return refresh
+    }()
+    
     // MARK: - Properties
     private let viewModel: CategoryDetailViewModel
     weak var coordinator: AppCoordinator?
@@ -30,6 +54,8 @@ final class CategoryDetailViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupCollectionView()
+        setupActivityIndicator()
+        setupBindings()
         loadData()
     }
     
@@ -45,6 +71,7 @@ final class CategoryDetailViewController: UIViewController {
             UINib(nibName: "FurnitureCollectionViewCell", bundle: nil),
             forCellWithReuseIdentifier: FurnitureCollectionViewCell.reuseIdentifier
         )
+        collectionView.refreshControl = refreshControl
         
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.minimumInteritemSpacing = 10
@@ -56,35 +83,92 @@ final class CategoryDetailViewController: UIViewController {
         }
     }
     
+    private func setupActivityIndicator() {
+        view.addSubview(activityIndicator)
+        view.addSubview(errorLabel)
+        
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            errorLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            errorLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            errorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            errorLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+        ])
+    }
+    
+    private func setupBindings() {
+        Task { [weak self] in
+            guard let self = self else { return }
+            for await state in self.viewModel.$state.values {
+                await MainActor.run {
+                    self.updateUI(for: state)
+                }
+            }
+        }
+    }
+    
     // MARK: - Private Methods
     private func loadData() {
         Task {
-            do {
-                try await viewModel.loadFurniture()
-                collectionView.reloadData()
-            } catch {
-                print("Error loading furniture: \(error)")
-            }
+            await viewModel.loadFurniture()
+        }
+    }
+    
+    @objc private func pullToRefresh() {
+        loadData()
+    }
+    
+    @MainActor
+    private func updateUI(for state: CategoryDetailViewModel.State) {
+        switch state {
+        case .idle:
+            collectionView.isHidden = true
+            errorLabel.isHidden = true
+            activityIndicator.stopAnimating()
+            
+        case .loading:
+            collectionView.isHidden = true
+            errorLabel.isHidden = true
+            activityIndicator.startAnimating()
+            
+        case .loaded(let items):
+            collectionView.isHidden = false
+            errorLabel.isHidden = true
+            activityIndicator.stopAnimating()
+            refreshControl.endRefreshing()
+            collectionView.reloadData()
+            
+        case .error(let message):
+            collectionView.isHidden = true
+            errorLabel.isHidden = false
+            errorLabel.text = message
+            activityIndicator.stopAnimating()
+            refreshControl.endRefreshing()
         }
     }
 }
 
-
 // MARK: - UICollectionViewDataSource
 extension CategoryDetailViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.items.count
+        if case let .loaded(items) = viewModel.state {
+            return items.count
+        }
+        return 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: FurnitureCollectionViewCell.reuseIdentifier,
             for: indexPath
-        ) as? FurnitureCollectionViewCell else {
+        ) as? FurnitureCollectionViewCell,
+        case let .loaded(items) = viewModel.state else {
             return UICollectionViewCell()
         }
         
-        let item = viewModel.items[indexPath.row]
+        let item = items[indexPath.row]
         cell.configure(with: item)
         return cell
     }
@@ -93,6 +177,8 @@ extension CategoryDetailViewController: UICollectionViewDataSource {
 // MARK: - UICollectionViewDelegate
 extension CategoryDetailViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-
+        guard case let .loaded(items) = viewModel.state else { return }
+        let item = items[indexPath.row]
+        coordinator?.showAR(for: item)
     }
 }

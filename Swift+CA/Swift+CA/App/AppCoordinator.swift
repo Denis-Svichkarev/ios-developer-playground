@@ -39,4 +39,15 @@ final class AppCoordinator: Coordinator {
         detailVC.coordinator = self
         navigationController.pushViewController(detailVC, animated: true)
     }
+    
+    func showAR(for item: FurnitureItem) {
+        let viewModel = ARViewModel(furnitureItem: item)
+        let arVC = ARViewController(viewModel: viewModel)
+        arVC.coordinator = self
+        navigationController.pushViewController(arVC, animated: true)
+    }
+    
+    func dismissAR() {
+        navigationController.popViewController(animated: true)
+    }
 }

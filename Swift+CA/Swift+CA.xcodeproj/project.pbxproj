@@ -292,6 +292,7 @@
 				DEVELOPMENT_TEAM = 74KE6VKKSF;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Swift+CA/Supporting Files/Info.plist";
+				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to your camera to enable AR features for furniture placement in your space. This helps you see how furniture will look in your room before making a purchase.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -321,6 +322,7 @@
 				DEVELOPMENT_TEAM = 74KE6VKKSF;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Swift+CA/Supporting Files/Info.plist";
+				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to your camera to enable AR features for furniture placement in your space. This helps you see how furniture will look in your room before making a purchase.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

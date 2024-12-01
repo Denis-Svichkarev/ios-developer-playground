@@ -5,11 +5,21 @@
 //  Created by Denis Svichkarev on 27/11/24.
 //
 
+import Combine
+
 final class CategoryDetailViewModel {
+    enum State {
+        case idle
+        case loading
+        case loaded([FurnitureItem])
+        case error(String)
+    }
+   
     // MARK: - Properties
     let category: FurnitureCategory
-    private(set) var items: [FurnitureItem] = []
     private let getCategoryFurniture: GetCategoryFurnitureUseCase
+    
+    @Published private(set) var state: State = .idle
     
     // MARK: - Initialization
     init(
@@ -21,7 +31,13 @@ final class CategoryDetailViewModel {
     }
     
     // MARK: - Public Methods
-    func loadFurniture() async throws {
-        items = try await getCategoryFurniture.execute(category: category)
+    func loadFurniture() async {
+        state = .loading
+        do {
+            let items = try await getCategoryFurniture.execute(category: category)
+            state = .loaded(items)
+        } catch {
+            state = .error("Failed to load furniture. Please try again.")
+        }
     }
 }
